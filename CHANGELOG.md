@@ -4,6 +4,7 @@
 
 ### Added
 - Added a GitHub Actions Python syntax check for pushes and pull requests.
+- Added an MIT license for the original project code; third-party dataset terms remain separate.
 - Documented the two workflows, sample assets, Sully Chen attribution, evaluation limits, and local setup steps in the README.
 - Added the matching synthetic demo model and its GIF, summary, and trajectory plot to the curated repository assets.
 

@@ -24,6 +24,7 @@ Micro-AutoDrive/
 ├── v2_real/                       # Dashcam data loader, training, and viewer
 ├── .gitignore
 ├── CHANGELOG.md
+├── LICENSE
 ├── README.md
 └── requirements.txt
 ```
@@ -145,4 +146,4 @@ The reported labels use a three-frame steering average. Validation is a chronolo
 
 GitHub Actions runs a Python syntax compilation check on pushes and pull requests. The project does not yet have a test suite.
 
-No license has been selected for the Micro-AutoDrive project code. Until one is added, do not assume the project code is licensed for reuse. The upstream dataset has separate attribution and usage terms; see Sully Chen's source page.
+The original Micro-AutoDrive code is licensed under the MIT License; see [LICENSE](LICENSE). This does not grant rights to Sully Chen's dataset or dataset-derived material. Follow the dataset creator's attribution and usage terms for those assets.
