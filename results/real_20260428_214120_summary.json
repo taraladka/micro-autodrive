@@ -1,0 +1,54 @@
+{
+  "run_name": "real_20260428_214120",
+  "timestamp": "2026-04-28T23:26:54.170308",
+  "dataset": "Sully Chen",
+  "config": {
+    "batch_size": 64,
+    "learning_rate": 0.0003,
+    "num_epochs": 25,
+    "val_split": 0.2,
+    "seed": 42,
+    "save_frequency": 5,
+    "cpu_threads": 8,
+    "num_workers": 0,
+    "live_viewer": false,
+    "validate_every": 2,
+    "cache_images": true,
+    "sequence_length": 5,
+    "target_smoothing": 3,
+    "gru_hidden_size": 64,
+    "gru_layers": 1,
+    "straight_keep_prob": 0.2
+  },
+  "model": {
+    "type": "temporal_gru",
+    "sequence_length": 5,
+    "hidden_size": 64,
+    "num_layers": 1
+  },
+  "data": {
+    "train_sequences": 28817,
+    "val_sequences": 9080
+  },
+  "training": {
+    "epochs_completed": 25,
+    "initial_train_loss": 0.013106612456031144,
+    "final_train_loss": 0.0005790360919329234,
+    "initial_val_loss": 0.011037906051697832,
+    "final_val_loss": 0.010667071454034312
+  },
+  "evaluation": {
+    "mae_deg": 12.362025260925293,
+    "rmse_deg": 23.73133659362793,
+    "median_abs_error_deg": 6.620274066925049,
+    "bias_deg": 4.215646743774414,
+    "within_1deg": 0.08436123348017621,
+    "within_2deg": 0.1699339207048458,
+    "within_5deg": 0.40165198237885463,
+    "within_10deg": 0.6479074889867842,
+    "straight_mae_deg": 6.682768821716309,
+    "left_turn_mae_deg": 28.08343505859375,
+    "right_turn_mae_deg": 11.993095397949219,
+    "sample_count": 9080
+  }
+}

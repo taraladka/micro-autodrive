@@ -79,6 +79,24 @@ Data/driving_dataset/
 
 The real-world training and visualization scripts expect this folder and the `filename.jpg steering_angle` metadata format. The dataset is not included in this repository, so download and extract it yourself before running `v2_real/train_real.py` or `v2_real/visualize_real.py`.
 
+### Published Sully Chen dataset run
+
+The model and results below were produced by this project's CNN+GRU training pipeline using Sully Chen's Dataset 1. Dataset credit belongs to **Sully Chen**; these are Micro-AutoDrive's training outputs, not results published by the dataset creator.
+
+| Artifact or validation metric | Value |
+| --- | ---: |
+| Model | [Download trained CNN+GRU weights](models/real_20260428_214120_final.pth) |
+| Training run | 25 epochs; 28,817 training sequences |
+| Validation sequences | 9,080 |
+| Mean absolute steering error (MAE) | 12.36° |
+| Root mean squared error (RMSE) | 23.73° |
+| Median absolute error | 6.62° |
+| Mean signed bias | +4.22° |
+
+The [run summary](results/real_20260428_214120_summary.json) contains the full metrics and configuration. The validation data is a held-out portion of the same dataset, so these results do not establish performance on a separate drive or real vehicle.
+
+![Validation results for the Sully Chen dataset run](results/real_20260428_214120_graphs.png)
+
 This keeps the repository compact and avoids mixing source control with large machine-specific artifacts.
 
 ## Design Notes
