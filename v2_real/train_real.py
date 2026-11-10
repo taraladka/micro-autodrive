@@ -218,7 +218,10 @@ def train_and_validate(
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=CONFIG["num_epochs"], eta_min=1e-5)
     regression_loss = nn.SmoothL1Loss(beta=0.05)
 
-    history = {"train_loss": [], "val_loss": []}
+    history = {"train_loss": [], "val_loss": [], "val_epoch": []}
+    best_val_loss = float("inf")
+    best_val_epoch = None
+    best_state = None
     live_view_enabled = CONFIG["live_viewer"]
     live_view_window = "Micro-AutoDrive | Live Training Viewer"
     last_val_avg = None
@@ -289,11 +292,19 @@ def train_and_validate(
                         pbar_val.set_postfix({"Loss": f"{val_running/(i+1):.4f}"})
 
                 last_val_avg = val_running / len(val_loader)
+                history["val_loss"].append(last_val_avg)
+                history["val_epoch"].append(epoch)
+                if last_val_avg < best_val_loss:
+                    best_val_loss = last_val_avg
+                    best_val_epoch = epoch
+                    best_state = {
+                        name: value.detach().cpu().clone()
+                        for name, value in model.state_dict().items()
+                    }
             else:
                 print(f"  [VAL] Skipped full validation at epoch {epoch} to save time.")
 
             val_avg = last_val_avg if last_val_avg is not None else train_avg
-            history["val_loss"].append(val_avg)
 
             scheduler.step()
             bar = "█" * int(30 * max(0, 1 - train_avg / (history["train_loss"][0] + 1e-9)))
@@ -311,6 +322,10 @@ def train_and_validate(
 
     if live_view_enabled:
         cv2.destroyAllWindows()
+    if best_state is not None:
+        model.load_state_dict(best_state)
+    history["best_val_epoch"] = best_val_epoch
+    history["best_val_loss"] = best_val_loss if best_state is not None else None
     return history
 
 
@@ -377,7 +392,8 @@ def save_graphs(history: dict, run_name: str, metrics: dict | None = None):
     epochs = range(1, len(history["train_loss"]) + 1)
     ax = axes[0, 0]
     ax.plot(epochs, history["train_loss"], color="#58a6ff", lw=2, label="Train Loss")
-    ax.plot(epochs, history["val_loss"], color="#f78166", lw=2, label="Val Loss")
+    ax.plot(history["val_epoch"], history["val_loss"], color="#f78166", lw=2,
+            marker="o", label="Val Loss (measured epochs)")
     ax.set_title(f"Real Data Training - {run_name}")
     ax.set_xlabel("Epoch")
     ax.set_ylabel("SmoothL1 Loss")
@@ -448,8 +464,13 @@ def save_summary(history: dict, run_name: str, train_samples: int, val_samples: 
     summary = {
         "run_name": run_name,
         "timestamp": datetime.now().isoformat(),
-        "dataset": "Sully Chen",
+        "dataset": "Sully Chen Dataset 1 (2017)",
         "config": CONFIG,
+        "validation_protocol": {
+            "split": "chronological holdout",
+            "purged_overlap_frames": CONFIG["sequence_length"] - 1,
+            "scope": "one recording; not an independent-drive evaluation",
+        },
         "model": {
             "type": "temporal_gru",
             "sequence_length": CONFIG["sequence_length"],
@@ -464,8 +485,10 @@ def save_summary(history: dict, run_name: str, train_samples: int, val_samples: 
             "epochs_completed": len(history["train_loss"]),
             "initial_train_loss": float(history["train_loss"][0]),
             "final_train_loss":   float(history["train_loss"][-1]),
-            "initial_val_loss":   float(history["val_loss"][0]),
-            "final_val_loss":     float(history["val_loss"][-1]),
+            "initial_val_loss": float(history["val_loss"][0]) if history["val_loss"] else None,
+            "final_val_loss": float(history["val_loss"][-1]) if history["val_loss"] else None,
+            "best_val_epoch": history.get("best_val_epoch"),
+            "best_val_loss": history.get("best_val_loss"),
         },
         "evaluation": metrics or {},
     }
@@ -513,9 +536,12 @@ def main():
     valid_end_indices = _build_valid_sequence_end_indices(base_dataset, CONFIG["sequence_length"])
     val_size = int(len(valid_end_indices) * CONFIG["val_split"])
     train_size = len(valid_end_indices) - val_size
-
-    train_end_indices = valid_end_indices[:train_size]
-    val_end_indices = valid_end_indices[train_size:]
+    split_index = train_size
+    purge_count = CONFIG["sequence_length"] - 1
+    train_end_indices = valid_end_indices[:max(0, split_index - purge_count)]
+    val_end_indices = valid_end_indices[split_index:]
+    if not train_end_indices or not val_end_indices:
+        raise ValueError("Not enough contiguous sequences for the requested train/validation split.")
     train_end_indices = _balance_sequence_indices(
         base_dataset,
         train_end_indices,
@@ -585,6 +611,8 @@ def main():
             "num_layers": CONFIG["gru_layers"],
             "sequence_length": CONFIG["sequence_length"],
             "target_smoothing": CONFIG["target_smoothing"],
+            "best_val_epoch": history.get("best_val_epoch"),
+            "best_val_loss": history.get("best_val_loss"),
         },
     )
     print(f"  [SAVED] Model -> {model_path}")

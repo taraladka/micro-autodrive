@@ -1,0 +1,29 @@
+{
+  "run_name": "micro_20260428_171040",
+  "timestamp": "2026-04-28T17:19:02.811057",
+  "config": {
+    "expert_episodes": 12,
+    "max_steps_per_episode": 1500,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "num_epochs": 25,
+    "eval_episodes": 5,
+    "seed": 42,
+    "gif_fps": 20,
+    "save_frequency": 5
+  },
+  "training": {
+    "initial_loss": 0.039463407759392284,
+    "final_loss": 0.0007959369753754211,
+    "loss_improvement_pct": 97.98309877327567
+  },
+  "evaluation": {
+    "episodes": 5,
+    "mean_reward": 4156.760117308364,
+    "mean_length": 1500.0,
+    "total_collisions": 0,
+    "collision_rate": 0.0,
+    "mean_speed_kmh": 99.27142040512092,
+    "success_rate": 1.0
+  }
+}

@@ -1,5 +1,17 @@
 # Micro-AutoDrive Changelog
 
+## [Unreleased]
+
+### Added
+- Added a GitHub Actions Python syntax check for pushes and pull requests.
+- Documented the two workflows, sample assets, Sully Chen attribution, evaluation limits, and local setup steps in the README.
+- Added the matching synthetic demo model and its GIF, summary, and trajectory plot to the curated repository assets.
+
+### Changed
+- The real-data chronological split now purges enough sequence endpoints to prevent training and validation windows from sharing image frames.
+- The real-data trainer now restores the best measured validation checkpoint before saving the final model.
+- Validation loss plots now show only epochs where validation actually ran; run summaries include the selected best epoch and split protocol.
+
 ## [v2.2.0] - Temporal Real-Driving Model
 **Date:** 2026-04-28
 

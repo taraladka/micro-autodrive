@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.tmp
+*.temp
+*.log
+
+# Local data and generated artifacts
+Data/
+training_data/
+checkpoints/
+report/
+
+# Keep only the curated sample models and results in version control.
+models/*
+!models/micro_20260428_171040_final.pth
+!models/real_20260428_214120_final.pth
+results/*
+!results/micro_20260428_171040_drive.gif
+!results/micro_20260428_171040_graphs.png
+!results/micro_20260428_171040_summary.json
+!results/micro_20260428_171040_trajectory.png
+!results/real_20260428_214120_graphs.png
+!results/real_20260428_214120_summary.json
+
+# Office lock files
+~$*.docx
+~$*.doc
