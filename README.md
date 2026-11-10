@@ -2,7 +2,7 @@
 
 Micro-AutoDrive is a lightweight autonomous driving project designed to run on standard laptop hardware. It combines a procedural 2D simulation pipeline with a real-world steering prediction pipeline, making it useful for experimentation with behavioral cloning, temporal modeling, and model evaluation without depending on large simulator stacks or GPU-only infrastructure.
 
-The repository is intentionally kept focused on source code and project metadata. Datasets, trained weights, checkpoints, cached outputs, and other generated artifacts are not versioned.
+The raw dataset, checkpoints, cached data, and most generated outputs are not versioned. The repository includes one curated trained model and its validation summary and graph as a sample run, produced by this project using Sully Chen's dataset.
 
 ## Overview
 
@@ -104,4 +104,4 @@ This keeps the repository compact and avoids mixing source control with large ma
 - `core/` contains the shared model definitions.
 - `v1_sim/` contains the simulation environment and synthetic training workflow.
 - `v2_real/` contains the real-road data pipeline and temporal steering model workflow.
-- Runtime outputs such as models, checkpoints, plots, and cached data are intentionally excluded from version control.
+- Raw data, checkpoints, and temporary outputs are excluded from version control. `models/` and `results/` include the published sample model and its validation graph and summary.
