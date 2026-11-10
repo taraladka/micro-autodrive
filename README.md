@@ -65,7 +65,19 @@ python v2_real/visualize_real.py
 
 ## Notes On Data
 
-The repository does not include third-party datasets or locally generated training outputs. To run the real-world pipeline, place the required driving data locally in the path expected by `v2_real/data_loader.py`.
+The repository does not include third-party datasets or locally generated training outputs. If you do not already have a dataset, you can use **Dataset 1** from [Sully Chen's driving-datasets repository](https://github.com/SullyChen/driving-datasets). It contains approximately 45,500 dashcam images with steering-angle labels and is hosted on [Google Drive](https://drive.google.com/file/d/1Ue4XohCOV5YXy57S_5tDfCVqzLr101M7/view?usp=sharing).
+
+### Dataset attribution and use
+
+Please credit **Sully Chen** as the creator and source of this dataset when using it. The original [dataset page](https://github.com/SullyChen/driving-datasets) describes it as intended for research and statistics only; do not use it to pilot or test a vehicle. Review the source repository's license and usage notes before redistributing the data.
+
+After downloading and extracting the dataset, place its images and `data.txt` file in:
+
+```text
+Data/driving_dataset/
+```
+
+The real-world training and visualization scripts expect this folder and the `filename.jpg steering_angle` metadata format. The dataset is not included in this repository, so download and extract it yourself before running `v2_real/train_real.py` or `v2_real/visualize_real.py`.
 
 This keeps the repository compact and avoids mixing source control with large machine-specific artifacts.
 
